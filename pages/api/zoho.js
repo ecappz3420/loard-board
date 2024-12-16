@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       try {
         const body = await req.body;
         const { formData, formName } = body;
-        if ((!formName || !formData)) {
+        if (!formName || !formData) {
           return res.status(400).json({
             message: "Missing 'Form Name' or 'Form Data' in request body",
           });

@@ -6,6 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import React from "react";
+import currencies from "./currencies";
 
 const CurrencyField = ({ name, label, control }) => {
   return (
@@ -24,8 +25,11 @@ const CurrencyField = ({ name, label, control }) => {
                 }
                 className="p-2 rounded outline-none"
               >
-                <option value="USD">USD</option>
-                <option value="INR">INR</option>
+                {
+                  currencies.map((curr, i) => (
+                    <option value={curr.code} key={i}>{curr.code}</option>
+                  ))
+                }
               </select>
               <input
                 type="number"

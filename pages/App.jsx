@@ -18,6 +18,16 @@ import dynamic from "next/dynamic";
 import CustomInput from "./CustomInput";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import CurrencyField from "./CurrencyField";
+import dropdown from "./dropdown";
+import submitHandler from "./submissionHandler";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@mui/material";
 
 // Validations
 const formSchema = z.object({
@@ -100,6 +110,12 @@ const App = () => {
     Destinations: [],
     Select_Book: [],
   });
+
+  const [baseCurrency, setBaseCurrency] = useState("USD");
+  const [baseCurrencyValue, setBaseCurrencyValue] = useState("USD");
+  const [convertedCurrency, setConvertedCurrency] = useState(0);
+  const [convertedCurrencyValue, setConvertedCurrencyValue] = useState(0);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     shouldFocusError: false,
@@ -120,9 +136,9 @@ const App = () => {
       Maximum_Load: [],
       Completion: undefined,
       Miximum_Disputch: { label: "", value: "" },
-      Maximum_Fuel: 0,
-      Capacity: 0,
+      Rate_Confirmation: 0,
       Trucks: 0,
+      Capacity: 0,
     },
   });
 
@@ -139,17 +155,41 @@ const App = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     const init = async () => {
       const serviceLocationRecords = await handleFetch(
         "Service_Locations",
         "(ID != 0)"
       );
-      const serviceLocResponse = serviceLocationRecords.records.data;
+      const customeRecords = await handleFetch("All_Customers", "(ID != 0)");
+      const loaderRecords = await handleFetch(
+        "All_Vendor_Statuses",
+        "(ID != 0)"
+      );
+      const originRecords = await handleFetch("All_Sites", "(ID != 0)");
+      const bookRecords = await handleFetch("All_Books", "(ID != 0)");
+
       setOptions((prev) => ({
         ...prev,
-        Service_Locations: serviceLocResponse.map((data) => ({
+        Service_Locations: serviceLocationRecords.records.data.map((data) => ({
           label: data.Tracking_Route,
+          value: data.ID,
+        })),
+        Customers: customeRecords.records.data.map((data) => ({
+          label: data.Customer_Name,
+          value: data.ID,
+        })),
+        Loaders: loaderRecords.records.data.map((data) => ({
+          label: data.Vendor_Status,
+          value: data.ID,
+        })),
+        Origins: originRecords.records.data.map((data) => ({
+          label: data.Loading_Site,
+          value: data.ID,
+        })),
+        Select_Book: bookRecords.records.data.map((data) => ({
+          label: data.Organization_Name,
           value: data.ID,
         })),
       }));
@@ -158,13 +198,13 @@ const App = () => {
   }, []);
 
   const dummyOptions = [
-    { label: "Choice 1", value: "12345" },
-    { label: "Choice 2", value: "2343245" },
-    { label: "Choice 3", value: "342454" },
+    { label: "Choice 1", value: "Choice 1" },
+    { label: "Choice 2", value: "Choice 2" },
+    { label: "Choice 3", value: "Choice 3" },
   ];
 
   const onSubmit = async (data) => {
-    console.log("Form Data:", data);
+    const formData = submitHandler(data);
   };
 
   const onError = (error) => {
@@ -215,7 +255,7 @@ const App = () => {
                   <FormLabel>Customer</FormLabel>
                   <FormControl>
                     <Select
-                      options={dummyOptions}
+                      options={options.Customers}
                       {...field}
                       isClearable
                       isSearchable
@@ -253,7 +293,7 @@ const App = () => {
                   <FormLabel>Maximum Load</FormLabel>
                   <FormControl>
                     <Select
-                      options={dummyOptions}
+                      options={dropdown.maximum_load}
                       isClearable
                       isMulti
                       onChange={(value) => field.onChange(value)}
@@ -272,7 +312,7 @@ const App = () => {
                   <FormLabel>Commodity</FormLabel>
                   <FormControl>
                     <Select
-                      options={dummyOptions}
+                      options={dropdown.commodity}
                       isClearable
                       onChange={(value) => field.onChange(value)}
                       {...field}
@@ -290,7 +330,7 @@ const App = () => {
                   <FormLabel>Loader</FormLabel>
                   <FormControl>
                     <Select
-                      options={dummyOptions}
+                      options={options.Loaders}
                       isClearable
                       isMulti
                       onChange={(value) => field.onChange(value)}
@@ -315,7 +355,7 @@ const App = () => {
                   <FormLabel>Origin</FormLabel>
                   <FormControl>
                     <Select
-                      options={dummyOptions}
+                      options={options.Origins}
                       isClearable
                       onChange={(value) => field.onChange(value)}
                       {...field}
@@ -325,11 +365,32 @@ const App = () => {
                 </FormItem>
               )}
             />
-            <CurrencyField
-              name="Vendor_Bill"
-              control={form.control}
-              label="Vendor Bill"
-            />
+            <div>
+              <CurrencyField
+                name="Vendor_Bill"
+                control={form.control}
+                label="Vendor Bill"
+              />
+              {baseCurrency != convertedCurrency && (
+                <div className="p-1 text-xs flex items-center text-blue-500 justify-start gap-[10px]">
+                  <div>{`1 ${baseCurrency} = ${convertedCurrencyValue} ${convertedCurrency}`}</div>
+                  <Dialog>
+                    <DialogTrigger>
+                      <small>Edit</small>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Modify Currency</DialogTitle>
+                      </DialogHeader>
+                      <div>
+                        <Input/>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              )}
+            </div>
+
             <CurrencyField
               name="Vendor_Bill_Converted"
               control={form.control}
@@ -361,7 +422,7 @@ const App = () => {
                   <FormLabel>Destination</FormLabel>
                   <FormControl>
                     <Select
-                      options={dummyOptions}
+                      options={options.Origins}
                       isClearable
                       onChange={(value) => field.onChange(value)}
                       {...field}
@@ -379,7 +440,7 @@ const App = () => {
                   <FormLabel>Select Book</FormLabel>
                   <FormControl>
                     <Select
-                      options={dummyOptions}
+                      options={options.Select_Book}
                       isClearable
                       onChange={(value) => field.onChange(value)}
                       {...field}
