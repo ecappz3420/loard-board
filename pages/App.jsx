@@ -132,7 +132,7 @@ const App = () => {
       criteira: criteira || "(ID != 0)",
     });
     try {
-      const response = await fetch(`/api/zoho?${query}`, {method: 'GET'});
+      const response = await fetch(`/api/zoho?${query}`, { method: "GET" });
       const result = await response.json();
       return result;
     } catch (error) {
@@ -145,7 +145,14 @@ const App = () => {
         "Service_Locations",
         "(ID != 0)"
       );
-      console.log(serviceLocationRecords);
+      const serviceLocResponse = serviceLocationRecords.records.data;
+      setOptions((prev) => ({
+        ...prev,
+        Service_Locations: serviceLocResponse.map((data) => ({
+          label: data.Tracking_Route,
+          value: data.ID,
+        })),
+      }));
     };
     init();
   }, []);
@@ -177,7 +184,7 @@ const App = () => {
                   <FormControl>
                     <Select
                       {...field}
-                      options={dummyOptions}
+                      options={options.Service_Locations}
                       isSearchable
                       isClearable
                       onChange={(value) => field.onChange(value)}
