@@ -6,7 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import React from "react";
-import currencies from "./currencies";
+import currencies from "../utils/currencies";
 
 const CurrencyField = ({ name, label, control, onChange, handleBaseCurrencyChange }) => {
   return (

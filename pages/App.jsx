@@ -18,18 +18,17 @@ import dynamic from "next/dynamic";
 import CustomInput from "./CustomInput";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import CurrencyField from "./CurrencyField";
-import dropdown from "./dropdown";
-import submitHandler from "./submissionHandler";
+import dropdown from "../utils/dropdown";
+import submitHandler from "../utils/submissionHandler";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import currencies from "./currencies";
+import currencies from "../utils/currencies";
 import Load from "./Load";
 
 // Validations
@@ -375,7 +374,7 @@ const App = () => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           format="DD-MMM-YYYY"
-                          className="w-[300px]"
+                          className="w-[300px] h-[30px]"
                           onChange={(date) => field.onChange(date)}
                           value={field.value || null}
                         />

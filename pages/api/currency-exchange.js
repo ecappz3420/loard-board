@@ -1,4 +1,4 @@
-import { exchangeCurrency } from "../controllers/tms.app";
+import { exchangeCurrency } from "../../controllers/tms.app";
 
 export default async function handler(req, res) {
     if(req.method === "GET"){

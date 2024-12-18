@@ -2,7 +2,7 @@ import {
   addRecord,
   getRecords,
   refreshAccessToken,
-} from "../controllers/tms.app";
+} from "../../controllers/tms.app";
 
 export default async function handler(req, res) {
   try {
