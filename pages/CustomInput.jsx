@@ -17,7 +17,7 @@ const CustomInput = ({ name, label, control, type = "text" }) => {
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input type={type} className="w-[300px]" {...field} />
+            <Input type={type} className="w-[300px] focus:border-blue-400 " {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>

@@ -6,9 +6,9 @@ import {
 
 export default async function handler(req, res) {
   try {
-    const access_token = await refreshAccessToken();
     if (req.method === "GET") {
       try {
+        const access_token = await refreshAccessToken();
         const { reportName, criteria } = req.query;
         if (!reportName) {
           return res.status(400).json({ message: "Report Name Not Found" });
@@ -24,6 +24,7 @@ export default async function handler(req, res) {
       }
     } else if (req.method === "POST") {
       try {
+        const access_token = await refreshAccessToken();
         const body = await req.body;
         const { formData, formName } = body;
         if (!formName || !formData) {
@@ -31,7 +32,7 @@ export default async function handler(req, res) {
             message: "Missing 'Form Name' or 'Form Data' in request body",
           });
         }
-        const response = await addRecord(access_token, formData, formName);
+        const response = await addRecord(access_token, formName, formData);
         return res.status(200).json({ response });
       } catch (error) {
         return res.status(400).json({ message: "Error adding records" });

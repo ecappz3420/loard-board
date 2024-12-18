@@ -98,3 +98,20 @@ export async function addRecord(accessToken, formName, data) {
     return { error: error.response?.data || error.message };
   }
 }
+
+export async function exchangeCurrency(baseCurrency) {
+  try {
+    const response = await axios.get(
+      `https://v6.exchangerate-api.com/v6/6ae9a8e1204b706244608358/latest/${baseCurrency}`,
+      {
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching currency");
+    return { error: "Error fetching currency" };
+  }
+}

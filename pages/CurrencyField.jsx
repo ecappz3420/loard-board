@@ -8,7 +8,7 @@ import {
 import React from "react";
 import currencies from "./currencies";
 
-const CurrencyField = ({ name, label, control }) => {
+const CurrencyField = ({ name, label, control, onChange, handleBaseCurrencyChange }) => {
   return (
     <FormField
       name={name}
@@ -20,32 +20,37 @@ const CurrencyField = ({ name, label, control }) => {
             <div className="flex items-center border rounded space-x-2 w-[300px]">
               <select
                 value={field.value?.currency || "USD"}
-                onChange={(e) =>
-                  field.onChange({ ...field.value, currency: e.target.value })
-                }
+                onChange={(e) => {
+                  const newValue = { ...field.value, currency: e.target.value };
+                  handleBaseCurrencyChange(e.target.value);
+                  field.onChange(newValue);
+                  if (onChange) onChange(newValue);
+                }}
                 className="p-2 rounded outline-none"
               >
-                {
-                  currencies.map((curr, i) => (
-                    <option value={curr.code} key={i}>{curr.code}</option>
-                  ))
-                }
+                {currencies.map((curr, i) => (
+                  <option value={curr.code} key={i}>
+                    {curr.code}
+                  </option>
+                ))}
               </select>
               <input
                 type="number"
                 step="0.01"
                 value={field.value?.amount || ""}
-                onChange={(e) =>
-                  field.onChange({
+                onChange={(e) => {
+                  const newValue = {
                     ...field.value,
                     amount: e.target.value ? parseFloat(e.target.value) : "",
-                  })
-                }
+                  };
+                  field.onChange(newValue);
+                  if (onChange) onChange(newValue); // Call external onChange if provided
+                }}
                 className="w-full border-0 outline-none p-2 rounded"
               />
             </div>
           </FormControl>
-          <FormMessage/>
+          <FormMessage />
         </FormItem>
       )}
     />
