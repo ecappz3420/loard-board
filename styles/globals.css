@@ -64,6 +64,6 @@
     @apply bg-background text-foreground;
   }
 }
-.MuiInputBase-input, .css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input, input[type="text"]{
+.MuiInputBase-input, .css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input{
   height: 0.4375em !important;
 }

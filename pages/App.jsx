@@ -1,10 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const Select = dynamic(() => import("react-select"), { ssr: false });
+const CurrencyField = dynamic(() => import("./CurrencyField"), { ssr: false });
+const CustomInput = dynamic(() => import("./CustomInput"), { ssr: false });
 import {
   Form,
   FormControl,
@@ -14,10 +17,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import dynamic from "next/dynamic";
-import CustomInput from "./CustomInput";
+
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import CurrencyField from "./CurrencyField";
 import dropdown from "../utils/dropdown";
 import submitHandler from "../utils/submissionHandler";
 import {
@@ -731,8 +732,7 @@ const App = () => {
       </div>
     );
   } else {
-    return (<Load />);
-    
+    return <Load />;
   }
 };
 
