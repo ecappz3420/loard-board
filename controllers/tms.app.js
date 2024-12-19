@@ -33,7 +33,6 @@ export async function refreshAccessToken() {
 
 export async function getRecords(accessToken, reportName, criteria) {
   try {
-    const params = criteria ? { criteria } : {};
     const response = await axios.get(
       `https://www.zohoapis.com/creator/v2.1/data/dhaqane/dlz/report/${reportName}?max_records=1000&criteria=${criteria}`,
       {
