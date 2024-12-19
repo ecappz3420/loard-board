@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const Select = dynamic(() => import("react-select"), { ssr: false });
-const CurrencyField = dynamic(() => import("./CurrencyField"), { ssr: false });
-const CustomInput = dynamic(() => import("./CustomInput"), { ssr: false });
+const CurrencyField = dynamic(() => import("../components/CurrencyField"), { ssr: false });
+const CustomInput = dynamic(() => import("../components/CustomInput"), { ssr: false });
 import {
   Form,
   FormControl,
