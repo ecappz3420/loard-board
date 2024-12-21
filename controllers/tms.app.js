@@ -101,7 +101,7 @@ export async function addRecord(accessToken, formName, data) {
 export async function exchangeCurrency(baseCurrency) {
   try {
     const response = await axios.get(
-      `https://v6.exchangerate-api.com/v6/6ae9a8e1204b706244608358/latest/${baseCurrency}`,
+      `https://v6.exchangerate-api.com/v6/${process.env.CURRENCY_API_KEY}/latest/${baseCurrency}`,
       {
         headers: {
           Accept: "application/json",

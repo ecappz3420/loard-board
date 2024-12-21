@@ -6,8 +6,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const Select = dynamic(() => import("react-select"), { ssr: false });
-const CurrencyField = dynamic(() => import("../components/CurrencyField"), { ssr: false });
-const CustomInput = dynamic(() => import("../components/CustomInput"), { ssr: false });
+const CurrencyField = dynamic(() => import("../components/CurrencyField"), {
+  ssr: false,
+});
+const CustomInput = dynamic(() => import("../components/CustomInput"), {
+  ssr: false,
+});
 import {
   Form,
   FormControl,
@@ -35,32 +39,37 @@ import Load from "./Load";
 // Validations
 const formSchema = z.object({
   Service_Locations: z.object({
-    label: z.string().nonempty({ message: "Required to fill the value" }),
-    value: z.string().nonempty({ message: "Required to fill the value" }),
+    label: z.string().nonempty({ message: "Required" }),
+    value: z.string().nonempty({ message: "Required" }),
   }),
-  Rate_Confirmation: z
-    .string()
-    .nonempty({ message: "Required to fill the value" }),
+  Rate_Confirmation: z.string().nonempty({ message: "Required" }),
   Trucks: z.coerce.number().optional(),
   Customer: z.object({
-    label: z.string().nonempty({ message: "Required to fill the value" }),
-    value: z.string().nonempty({ message: "Required to fill the value" }),
+    label: z.string().nonempty({ message: "Required" }),
+    value: z.string().nonempty({ message: "Required" }),
   }),
-  Maximum_Load: z
-    .array(z.object({ label: z.string(), value: z.string() }))
-    .optional(),
+  Maximum_Load: z.array(
+    z.object({
+      label: z.string().nonempty({ message: "Required" }),
+      value: z.string().nonempty({ message: "Required" }),
+    })
+  ),
   Completion: z.coerce.date().optional(),
   Commodity: z.object({
-    label: z.string().nonempty({ message: "Required to fill the value" }),
-    value: z.string().nonempty({ message: "Required to fill the value" }),
+    label: z.string().nonempty({ message: "Required" }),
+    value: z.string().nonempty({ message: "Required" }),
   }),
-  Loader: z
-    .array(z.object({ label: z.string(), value: z.string() }))
-    .optional(),
+  Loader: z.array(
+    z.object({
+      label: z.string().nonempty({ message: "Required" }),
+      value: z.string().nonempty({ message: "Required" }),
+    })
+  ),
+
   Capacity: z.coerce.number().optional(),
   Origin: z.object({
-    label: z.string().nonempty({ message: "Required to fill the value" }),
-    value: z.string().nonempty({ message: "Required to fill the value" }),
+    label: z.string().nonempty({ message: "Required" }),
+    value: z.string().nonempty({ message: "Required" }),
   }),
   Vendor_Bill: z.object({
     currency: z.string().nonempty({ message: "Required" }),
@@ -73,15 +82,13 @@ const formSchema = z.object({
   Maximum_Fuel: z
     .array(z.object({ label: z.string(), value: z.string() }))
     .optional(),
-  Destinations: z
-    .object({
-      label: z.string().nonempty({ message: "Required" }),
-      value: z.string().nonempty({ message: "Required" }),
-    })
-    .optional(),
+  Destinations: z.object({
+    label: z.string().nonempty({ message: "Required" }),
+    value: z.string().nonempty({ message: "Required" }),
+  }),
   Select_Book: z.object({
-    label: z.string(),
-    value: z.string(),
+    label: z.string().nonempty({ message: "Required" }),
+    value: z.string().nonempty({ message: "Required" }),
   }),
   Miximum_Disputch: z
     .array(z.object({ label: z.string(), value: z.string() }))
@@ -298,8 +305,13 @@ const App = () => {
           formData: formData,
         }),
       });
-      const result = await response.json();
-      console.log(result);
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        window.location.reload();
+      } else {
+        throw new Error(`Error submitting data: ${response.statusText}`);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -400,6 +412,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -418,6 +431,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -437,6 +451,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -461,6 +476,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -561,6 +577,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -579,6 +596,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -597,6 +615,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -616,6 +635,7 @@ const App = () => {
                         className="w-[300px]"
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -713,6 +733,7 @@ const App = () => {
                         />
                       </LocalizationProvider>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
